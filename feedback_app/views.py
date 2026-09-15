@@ -68,6 +68,26 @@ def add_student(request):
 
 @login_required
 @user_passes_test(is_admin, login_url='login')
+def edit_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    
+    if request.method == 'POST':
+        # Update the Student profile
+        student.roll_number = request.POST.get('roll_number')
+        student.name = request.POST.get('name')
+        student.department = request.POST.get('department')
+        student.email = request.POST.get('email')
+        student.phone = request.POST.get('phone')
+        student.address = request.POST.get('address')
+        student.save()
+        
+        messages.success(request, "Student updated successfully.")
+        return redirect('manage_students')
+    
+    return render(request, 'admin_panel/edit_student.html', {'student': student})
+
+@login_required
+@user_passes_test(is_admin, login_url='login')
 def delete_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     student.user.delete() # This deletes the Django User and cascades to Student

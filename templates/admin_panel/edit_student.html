@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Edit Student</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Roll Number</label>
+            <input type="text" name="roll_number" value="{{ student.roll_number }}" required>
+        </div>
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" value="{{ student.name }}" required>
+        </div>
+        <div class="form-group">
+            <label>Department</label>
+            <input type="text" name="department" value="{{ student.department }}" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ student.email }}" required>
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="phone" value="{{ student.phone }}" required>
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <textarea name="address" rows="3" required>{{ student.address }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Student</button>
+        <a href="{% url 'manage_students' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
