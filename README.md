@@ -293,26 +293,26 @@ Both platforms support Django with the same environment variables.
 ## Testing Checklist
 
 ### Admin Tests
-- [ ] Login with admin credentials
-- [ ] View dashboard statistics
-- [ ] Add new student
-- [ ] Delete student
-- [ ] Add new teacher
-- [ ] Delete teacher
-- [ ] View all feedback
+- [x] Login with admin credentials
+- [x] View dashboard statistics
+- [x] Add new student
+- [x] Delete student
+- [x] Add new teacher
+- [x] Delete teacher
+- [x] View all feedback
 
 ### Student Tests
-- [ ] Login with student credentials
-- [ ] View auto-filled profile
-- [ ] Select teacher from dropdown
-- [ ] Click star rating
-- [ ] Write feedback description
-- [ ] Submit feedback
-- [ ] See Thank You page
-- [ ] Verify duplicate prevention
+- [x] Login with student credentials
+- [x] View auto-filled profile
+- [x] Select teacher from dropdown
+- [x] Click star rating
+- [x] Write feedback description
+- [x] Submit feedback
+- [x] See Thank You page
+- [x] Verify duplicate prevention
 
 ### Security Tests
-- [ ] Student cannot access `/admin-dashboard/`
-- [ ] Admin cannot access `/student-dashboard/`
-- [ ] Unauthenticated users redirected to login
-- [ ] CSRF tokens present in all forms
+- [x] Student cannot access `/admin-dashboard/`
+- [x] Admin cannot access `/student-dashboard/`
+- [x] Unauthenticated users redirected to login
+- [x] CSRF tokens present in all forms
