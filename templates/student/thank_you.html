@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Thank You{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 60px 20px; background: white; border-radius: 8px; max-width: 600px; margin: 50px auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <div style="font-size: 60px; color: #0f9d58; margin-bottom: 20px;">✔</div>
+    <h1 style="color: #0f9d58;">Thank You!</h1>
+    <p style="font-size: 18px; color: #4b5563; margin: 20px 0;">
+        Thank you for submitting your valuable feedback.
+    </p>
+    <a href="{% url 'student_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+</div>
+{% endblock %}

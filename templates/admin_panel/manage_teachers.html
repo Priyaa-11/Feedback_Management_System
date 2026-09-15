@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Teachers{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Teacher Management</h1>
+    <a href="{% url 'add_teacher' %}" class="btn btn-primary">+ Add Teacher</a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for teacher in teachers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ teacher.name }}</td>
+            <td>{{ teacher.department }}</td>
+            <td>{{ teacher.email }}</td>
+            <td>
+                <a href="{% url 'delete_teacher' teacher.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align:center;">No teachers found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

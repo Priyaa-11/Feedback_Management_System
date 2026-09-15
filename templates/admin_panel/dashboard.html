@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+<div class="cards-grid">
+    <div class="card card-blue">
+        <div>
+            <h3>Total Students</h3>
+            <p class="card-number">{{ total_students }}</p>
+        </div>
+        <div class="card-icon">🎓</div>
+    </div>
+    <div class="card card-green">
+        <div>
+            <h3>Total Teachers</h3>
+            <p class="card-number">{{ total_teachers }}</p>
+        </div>
+        <div class="card-icon">👨‍🏫</div>
+    </div>
+    <div class="card card-yellow">
+        <div>
+            <h3>Total Feedback</h3>
+            <p class="card-number">{{ total_feedback }}</p>
+        </div>
+        <div class="card-icon">💬</div>
+    </div>
+</div>
+
+<h2 class="section-title">Recent Feedback</h2>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Teacher</th>
+            <th>Rating</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fb in recent_feedback %}
+        <tr>
+            <td>{{ fb.student.name }}</td>
+            <td>{{ fb.teacher.name }}</td>
+            <td>
+                {% for i in "12345" %}
+                    {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ fb.created_at|date:"d M Y H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;">No feedback submitted yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}View Feedback{% endblock %}
+
+{% block content %}
+<h1>All Feedback Submissions</h1>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Student</th>
+            <th>Roll No</th>
+            <th>Teacher</th>
+            <th>Rating</th>
+            <th>Description</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fb in feedbacks %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ fb.student.name }}</td>
+            <td>{{ fb.student.roll_number }}</td>
+            <td>{{ fb.teacher.name }}</td>
+            <td>
+                {% for i in "12345" %}
+                    {% if forloop.counter <= fb.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ fb.description }}</td>
+            <td>{{ fb.created_at|date:"d M Y H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" style="text-align:center;">No feedback submitted yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
