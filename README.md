@@ -37,130 +37,129 @@ A Django-based web application for managing student feedback in educational inst
 
 Before running this project, ensure you have:
 
-- **Python 3.10+** installed  
-  Download from: https://www.python.org/downloads/
-- **Git** (optional, for version control)  
-  Download from: https://git-scm.com/downloads
+- **Python 3.10+** installed (Download from: https://www.python.org/downloads/)
+- **Git** (optional, for version control) (Download from: https://git-scm.com/downloads)
 
 ## Installation and Setup
 
 ### Step 1: Clone the Project
+
 ```bash
 git clone <your-repository-url>
 cd Feedback_Management_System
+```
 
-Step 2: Create Virtual Environment
-Windows:
+### Step 2: Create Virtual Environment
 
-bash
+**Windows:**
+
+```bash
 python -m venv venv
 venv\Scripts\activate
+```
 
-Linux/Mac:
+**Linux/Mac:**
 
-bash
+```bash
 python3 -m venv venv
 source venv/bin/activate
-Step 3: Install Dependencies
-bash
-pip install -r requirements.txt
+```
 
-Step 4: Configure Environment Variables
+### Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 4: Configure Environment Variables
+
 Copy the environment file:
 
-bash
+```bash
 cp .env.example .env
-Edit .env file and update the values:
+```
 
-text
+Edit `.env` file and update the values:
+
+```text
 SECRET_KEY=your-secret-key-here
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 DATABASE_URL=sqlite:///db.sqlite3
+```
 
-Step 5: Run Migrations
-bash
+### Step 5: Run Migrations
+
+```bash
 python manage.py makemigrations
 python manage.py migrate
+```
 
-Step 6: Create Superuser (Principal Account)
-bash
+### Step 6: Create Superuser (Principal Account)
+
+```bash
 python manage.py createsuperuser
+```
+
 Enter:
-Username: admin (or your choice)
+- **Username:** admin (or your choice)
+- **Email:** admin@college.edu
+- **Password:** (a strong password)
 
-Email: admin@college.edu
+### Step 7: Run the Development Server
 
-Password: (a strong password)
-
-Step 7: Run the Development Server
-bash
+```bash
 python manage.py runserver
+```
 
-Step 8: Access the Application
+### Step 8: Access the Application
+
 Open your browser and visit: http://127.0.0.1:8000/
 
-Usage Guide
-Admin Login
-Go to the login page.
+## Usage Guide
 
-Enter the superuser credentials you created.
+### Admin Login
+1. Go to the login page.
+2. Enter the superuser credentials you created.
+3. You will be redirected to the Admin Dashboard.
 
-You will be redirected to the Admin Dashboard.
+### Adding Teachers
+1. Login as admin.
+2. Click "Teachers" in the navigation bar.
+3. Click "+ Add Teacher".
+4. Enter teacher name, department, and email.
+5. Click Submit.
 
-Adding Teachers
-Login as admin.
+### Adding Students
+1. Login as admin.
+2. Click "Students" in the navigation bar.
+3. Click "+ Add Student".
+4. Fill in the student details (username, password, roll number, name, department, email, phone, address).
+5. Click Submit. The system automatically creates both the Django User and the Student profile.
 
-Click "Teachers" in the navigation bar.
-Click "+ Add Teacher".
+### Student Login
+1. Go to the login page.
+2. Enter the username and password you set when adding the student.
+3. You will be redirected to the Student Dashboard.
 
-Enter teacher name, department, and email.
+### Submitting Feedback
+1. Login as a student.
+2. Click "+ Submit New Feedback".
+3. Verify the auto-filled details (Roll Number, Name, Department).
+4. Select a teacher from the dropdown.
+5. Click stars for rating (1-5).
+6. Write your feedback in the description box.
+7. Click Submit Feedback.
+8. You will see the Thank You page.
 
-Click Submit.
+### Viewing Feedback (Admin)
+1. Login as admin.
+2. Click "Feedback" in the navigation bar.
+3. View all feedback submissions with student name, roll number, teacher name, rating, description, and date.
 
-Adding Students
-Login as admin.
+## Project Structure
 
-Click "Students" in the navigation bar.
-
-Click "+ Add Student".
-
-Fill in the student details (username, password, roll number, name, department, email, phone, address).
-Click Submit. The system automatically creates both the Django User and the Student profile.
-
-Student Login
-Go to the login page.
-
-Enter the username and password you set when adding the student.
-
-You will be redirected to the Student Dashboard.
-
-Submitting Feedback
-Login as a student.
-
-Click "+ Submit New Feedback".
-
-Verify the auto-filled details (Roll Number, Name, Department).
-
-Select a teacher from the dropdown.
-
-Click stars for rating (1-5).
-
-Write your feedback in the description box.
-
-Click Submit Feedback.
-
-You will see the Thank You page
-
-Viewing Feedback (Admin)
-Login as admin.
-
-Click "Feedback" in the navigation bar.
-
-View all feedback submissions with student name, roll number, teacher name, rating, description, and date.
-
-Project Structure
-
+```text
 feedback_management_system/
 │
 ├── manage.py
@@ -209,136 +208,111 @@ feedback_management_system/
     │   └── style.css
     └── js/
         └── star_rating.js
+```
 
-Database Schema
-User (Django Built-in)
-username (unique)
+## Database Schema
 
-password (hashed)
+### User (Django Built-in)
+- username (unique)
+- password (hashed)
+- email
+- is_staff (for admin)
+- is_superuser (for principal)
 
-email
+### Student
+- user (OneToOne to User)
+- name
+- roll_number (unique)
+- department
+- email
+- phone
+- address
 
-is_staff (for admin)
+### Teacher
+- name
+- department
+- email
 
-is_superuser (for principal)
+### Feedback
+- student (ForeignKey to Student)
+- teacher (ForeignKey to Teacher)
+- rating (1-5)
+- description
+- created_at
 
-Student
-user (OneToOne to User)
+## Role-Based Access
 
-name
+### Admin (Principal)
+- **Can access:** Dashboard, Students, Teachers, Feedback
+- **Can perform:** Add/Delete students and teachers, View all feedback
+- **Cannot:** Submit feedback (blocked by `user_passes_test` decorator)
 
-roll_number (unique)
+### Student
+- **Can access:** Student Dashboard, Feedback Form, Thank You page
+- **Can perform:** Submit feedback, view own feedback history
+- **Cannot:** Access admin pages (blocked by `user_passes_test` decorator)
 
-department
+## Security Features
 
-email
+- CSRF protection on all forms
+- Password hashing using Django's built-in system
+- Session-based authentication
+- Role-based access control (decorators: `is_admin`, `is_student`)
+- Server-side validation (rating 1-5, no empty descriptions)
+- Duplicate feedback prevention (per student per teacher)
+- SQL injection protection (Django ORM)
+- XSS protection (Django templates)
 
-phone
+## Deployment
 
-address
+### Recommended: Railway
+1. Push your code to GitHub.
+2. Sign up at https://railway.app/ using GitHub.
+3. Create a new project from your GitHub repo.
+4. Add a PostgreSQL database.
+5. Set environment variables: `SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS`, `DATABASE_URL`.
+6. Deploy.
 
-Teacher
-name
-
-department
-
-email
-
-Feedback
-student (ForeignKey to Student)
-
-teacher (ForeignKey to Teacher)
-
-rating (1-5)
-
-description
-
-created_at
-
-Role-Based Access
-Admin (Principal)
-Can access: Dashboard, Students, Teachers, Feedback
-
-Can perform: Add/Delete students and teachers, View all feedback
-
-Cannot: Submit feedback (blocked by user_passes_test decorator)
-
-Student
-Can access: Student Dashboard, Feedback Form, Thank You page
-
-Can perform: Submit feedback, view own feedback history
-
-Cannot: Access admin pages (blocked by user_passes_test decorator)
-
-Security Features
-CSRF protection on all forms
-
-Password hashing using Django's built-in system
-
-Session-based authentication
-
-Role-based access control (decorators: is_admin, is_student)
-
-Server-side validation (rating 1-5, no empty descriptions)
-
-Duplicate feedback prevention (per student per teacher)
-
-SQL injection protection (Django ORM)
-
-XSS protection (Django templates)
-
-Deployment
-Recommended: Railway
-Push your code to GitHub.
-
-Sign up at https://railway.app/ using GitHub.
-
-Create a new project from your GitHub repo.
-
-Add a PostgreSQL database.
-
-Set environment variables: SECRET_KEY, DEBUG=False, ALLOWED_HOSTS, DATABASE_URL.
-
-Deploy.
-
-Alternative: Render or PythonAnywhere
+### Alternative: Render or PythonAnywhere
 Both platforms support Django with the same environment variables.
 
-Troubleshooting
-CSRF Token Error
-Solution: Refresh the page or clear browser cookies, then log in again.
+## Troubleshooting
 
-Student Login Fails
-Solution: Make sure the student was created via the FMS Admin Panel (not the Django Admin), which properly creates both User and Student profile.
+### CSRF Token Error
+**Solution:** Refresh the page or clear browser cookies, then log in again.
 
-Session Data Corrupted
-Solution: Log out, close the browser tab, and log back in.
+### Student Login Fails
+**Solution:** Make sure the student was created via the FMS Admin Panel (not the Django Admin), which properly creates both User and Student profile.
 
-Static Files Not Loading
-Solution: Run python manage.py collectstatic to gather static files.
+### Session Data Corrupted
+**Solution:** Log out, close the browser tab, and log back in.
 
-Testing Checklist
-Admin Tests
-□ Login with admin credentials
-□ View dashboard statistics
-□ Add new student
-□ Delete student
-□ Add new teacher
-□ Delete teacher
-□ View all feedback
+### Static Files Not Loading
+**Solution:** Run `python manage.py collectstatic` to gather static files.
 
-Student Tests
-□ Login with student credentials
-□ View auto-filled profile
-□ Select teacher from dropdown
-□ Click star rating
-□ Write feedback description
-□ Submit feedback
-□ See Thank You page
-□ Verify duplicate prevention
+## Testing Checklist
 
-Security Tests
-□ Student cannot access /admin-dashboard/
-□ Admin cannot access /student-dashboard/
-□ Unauthenticated users redirected to login
-□ CSRF tokens present in all forms
+### Admin Tests
+- [ ] Login with admin credentials
+- [ ] View dashboard statistics
+- [ ] Add new student
+- [ ] Delete student
+- [ ] Add new teacher
+- [ ] Delete teacher
+- [ ] View all feedback
+
+### Student Tests
+- [ ] Login with student credentials
+- [ ] View auto-filled profile
+- [ ] Select teacher from dropdown
+- [ ] Click star rating
+- [ ] Write feedback description
+- [ ] Submit feedback
+- [ ] See Thank You page
+- [ ] Verify duplicate prevention
+
+### Security Tests
+- [ ] Student cannot access `/admin-dashboard/`
+- [ ] Admin cannot access `/student-dashboard/`
+- [ ] Unauthenticated users redirected to login
+- [ ] CSRF tokens present in all forms
